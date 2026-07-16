@@ -9,66 +9,26 @@ const serverDir = resolve(distDir, 'server');
 const hostingDir = resolve(distDir, '.openai');
 
 const serverSource = `
-import http from 'node:http';
-import fs from 'node:fs';
-import path from 'node:path';
-const siteRoot = path.resolve(process.cwd(), 'dist', 'site');
-const port = Number(process.env.PORT || 3000);
+async function fetchAsset(request, env) {
+  if (env?.ASSETS?.fetch) {
+    return env.ASSETS.fetch(request);
+  }
+  return new Response('Static asset binding is unavailable.', { status: 500 });
+}
 
-const contentTypes = {
-  '.html': 'text/html; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.js': 'application/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.svg': 'image/svg+xml',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.gif': 'image/gif',
-  '.ico': 'image/x-icon',
-  '.txt': 'text/plain; charset=utf-8'
+export default {
+  async fetch(request, env) {
+    let response = await fetchAsset(request, env);
+
+    if (response.status === 404) {
+      const url = new URL(request.url);
+      url.pathname = '/index.html';
+      response = await fetchAsset(new Request(url.toString(), request), env);
+    }
+
+    return response;
+  }
 };
-
-function safeResolve(urlPath) {
-  const cleanPath = decodeURIComponent(new URL(urlPath, 'http://localhost').pathname);
-  const normalized = cleanPath === '/' ? '/index.html' : cleanPath;
-  const filePath = path.resolve(siteRoot, '.' + normalized);
-  return filePath.startsWith(siteRoot) ? filePath : null;
-}
-
-function sendFile(res, filePath) {
-  const ext = path.extname(filePath).toLowerCase();
-  const type = contentTypes[ext] || 'application/octet-stream';
-  res.writeHead(200, { 'Content-Type': type });
-  fs.createReadStream(filePath).pipe(res);
-}
-
-const server = http.createServer((req, res) => {
-  const filePath = safeResolve(req.url || '/');
-  if (!filePath) {
-    res.writeHead(400);
-    res.end('Bad request');
-    return;
-  }
-
-  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-    sendFile(res, filePath);
-    return;
-  }
-
-  const fallback = path.join(siteRoot, 'index.html');
-  if (fs.existsSync(fallback)) {
-    sendFile(res, fallback);
-    return;
-  }
-
-  res.writeHead(404);
-  res.end('Not found');
-});
-
-server.listen(port, () => {
-  console.log('Static site server listening on port ' + port);
-});
 `.trimStart();
 
 await rm(distDir, { recursive: true, force: true });
