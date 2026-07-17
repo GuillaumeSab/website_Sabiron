@@ -26,7 +26,14 @@ class Audit(HTMLParser):
 
 def main() -> int:
     root = Path(__file__).resolve().parents[1] / "docs"
-    pages = [root / "index.html", root / "fr" / "index.html", root / "publications" / "index.html", root / "fr" / "publications" / "index.html"]
+    pages = [
+        root / "index.html",
+        root / "fr" / "index.html",
+        root / "publications" / "index.html",
+        root / "fr" / "publications" / "index.html",
+        root / "skills" / "index.html",
+        root / "fr" / "skills" / "index.html",
+    ]
     errors: list[str] = []
     for page in pages:
         if not page.exists():

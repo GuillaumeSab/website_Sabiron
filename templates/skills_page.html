@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ 'Inventaire de compétences de Guillaume Sabiron' if lang == 'fr' else 'Guillaume Sabiron skills inventory' }}">
+  <title>{{ 'Compétences' if lang == 'fr' else 'Skills' }} · Guillaume Sabiron</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio-overrides.css') }}">
+  <script src="{{ url_for('static', filename='js/scripts.js') }}" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-name" href="{{ url_for('home', lang=lang) }}">Guillaume Sabiron</a>
+    <nav class="site-menu site-menu-static" aria-label="{{ 'Navigation principale' if lang == 'fr' else 'Main navigation' }}">
+      <a href="{{ url_for('home', lang=lang) }}#skills">{{ 'Retour au site' if lang == 'fr' else 'Back to site' }}</a>
+      <span class="language-switcher" aria-label="Language selector"><a class="{{ 'is-active' if lang == 'en' else '' }}" href="{{ url_for('skills', lang='en') }}" hreflang="en">EN</a><a class="{{ 'is-active' if lang == 'fr' else '' }}" href="{{ url_for('skills', lang='fr') }}" hreflang="fr">FR</a></span>
+    </nav>
+  </header>
+  <main class="section"><div class="content">{% include 'skills.html' %}</div></main>
+  <footer><div class="content">© <span data-current-year></span> Guillaume Sabiron · Lyon, France</div></footer>
+</body>
+</html>
