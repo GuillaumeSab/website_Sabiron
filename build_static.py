@@ -22,10 +22,12 @@ def _render_page(client, route: str, language: str, static_prefix: str, replacem
 
 def build_static_site() -> Path:
     with app.test_client() as client:
-        rendered_en = _render_page(client, "/", "en", "static/", {'href="/?lang=en"': 'href="./"', 'href="/?lang=fr"': 'href="fr/"', 'href="/publications/?lang=en"': 'href="publications/"', 'href="/publications/?lang=fr"': 'href="fr/publications/"'})
-        rendered_fr = _render_page(client, "/", "fr", "../static/", {'href="/?lang=en"': 'href="../"', 'href="/?lang=fr"': 'href="./"', 'href="/publications/?lang=en"': 'href="../publications/"', 'href="/publications/?lang=fr"': 'href="publications/"'})
+        rendered_en = _render_page(client, "/", "en", "static/", {'href="/?lang=en"': 'href="./"', 'href="/?lang=fr"': 'href="fr/"', 'href="/publications/?lang=en"': 'href="publications/"', 'href="/publications/?lang=fr"': 'href="fr/publications/"', 'href="/skills/?lang=en"': 'href="skills/"', 'href="/skills/?lang=fr"': 'href="fr/skills/"'})
+        rendered_fr = _render_page(client, "/", "fr", "../static/", {'href="/?lang=en"': 'href="../"', 'href="/?lang=fr"': 'href="./"', 'href="/publications/?lang=en"': 'href="../publications/"', 'href="/publications/?lang=fr"': 'href="publications/"', 'href="/skills/?lang=en"': 'href="../skills/"', 'href="/skills/?lang=fr"': 'href="skills/"'})
         publications_en = _render_page(client, "/publications/", "en", "../static/", {'href="/?lang=en"': 'href="../"', 'href="/?lang=fr"': 'href="../fr/"', 'href="/publications/?lang=en"': 'href="./"', 'href="/publications/?lang=fr"': 'href="../fr/publications/"'})
         publications_fr = _render_page(client, "/publications/", "fr", "../../static/", {'href="/?lang=en"': 'href="../../"', 'href="/?lang=fr"': 'href="../"', 'href="/publications/?lang=en"': 'href="../../publications/"', 'href="/publications/?lang=fr"': 'href="./"'})
+        skills_en = _render_page(client, "/skills/", "en", "../static/", {'href="/?lang=en"': 'href="../"', 'href="/?lang=fr"': 'href="../fr/"', 'href="/skills/?lang=en"': 'href="./"', 'href="/skills/?lang=fr"': 'href="../fr/skills/"'})
+        skills_fr = _render_page(client, "/skills/", "fr", "../../static/", {'href="/?lang=en"': 'href="../../"', 'href="/?lang=fr"': 'href="../"', 'href="/skills/?lang=en"': 'href="../../skills/"', 'href="/skills/?lang=fr"': 'href="./"'})
 
     if OUTPUT_DIR.exists():
         shutil.rmtree(OUTPUT_DIR)
@@ -51,6 +53,12 @@ def build_static_site() -> Path:
     french_publications_dir = french_dir / "publications"
     french_publications_dir.mkdir(exist_ok=True)
     (french_publications_dir / "index.html").write_text(publications_fr, encoding="utf-8")
+    skills_dir = OUTPUT_DIR / "skills"
+    skills_dir.mkdir(exist_ok=True)
+    (skills_dir / "index.html").write_text(skills_en, encoding="utf-8")
+    french_skills_dir = french_dir / "skills"
+    french_skills_dir.mkdir(exist_ok=True)
+    (french_skills_dir / "index.html").write_text(skills_fr, encoding="utf-8")
 
     return OUTPUT_DIR
 

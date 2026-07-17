@@ -1,57 +1,45 @@
-<div class="resume-section-content skills-shell">
-    <h2 class="mb-5">{{ 'Compétences' if lang == 'fr' else 'Skills' }}</h2>
-    <div class="skills-grid">
-        <article class="skill-card">
-            <h3>Leadership &amp; program governance</h3>
-            <ul class="skill-list">
-                <li>Portfolio management and roadmap ownership</li>
-                <li>Resource planning, risk management, and dependency steering</li>
-                <li>Functional leadership in matrix environments</li>
-                <li>Executive communication and stakeholder alignment</li>
-            </ul>
-        </article>
+<div class="resume-section-content skills-inventory">
+  <p class="eyebrow">{{ 'Inventaire de compétences' if lang == 'fr' else 'Skills inventory' }}</p>
+  <h1>{{ 'Une expertise structurée, sans surpromesse' if lang == 'fr' else 'Structured expertise, without overclaiming' }}</h1>
+  <p class="section-intro">{{ 'Cette grille distingue les compétences signature, solidement établies, opérationnelles et simplement explorées. Elle décrit un profil d’architecte de systèmes scientifiques et de responsable de programmes R&D, et non un spécialiste de chaque outil cité.' if lang == 'fr' else 'This framework separates signature, well-established, operational and exploratory capabilities. It describes a scientific-systems architect and R&D program leader, not a specialist in every tool mentioned.' }}</p>
 
-        <article class="skill-card">
-            <h3>Product strategy &amp; delivery</h3>
-            <ul class="skill-list">
-                <li>Use-case definition and product vision</li>
-                <li>Feature prioritization, specifications, and KPIs</li>
-                <li>Demonstrations, feedback loops, and partner-facing delivery</li>
-                <li>Mobile applications, SaaS platforms, and decision-support tools</li>
-            </ul>
-        </article>
+  <section class="skill-tier skill-tier-signature">
+    <p class="skill-tier-label">{{ 'Niveau 1 · Compétences signature' if lang == 'fr' else 'Level 1 · Signature strengths' }}</p>
+    <h3>{{ 'Le cœur du positionnement' if lang == 'fr' else 'Core positioning' }}</h3>
+    <p><strong>{{ 'Formulation recommandée :' if lang == 'fr' else 'Recommended formulation:' }}</strong> {{ 'Concevoir des architectures de systèmes robustes qui relient modèles scientifiques, données, logiciels et contraintes opérationnelles.' if lang == 'fr' else 'Designing robust system architectures that integrate scientific models, data, software and operational constraints.' }}</p>
+    <div class="skill-tags">{% for item in ['Systems architecture','Scientific architecture','Problem framing','Complex systems integration','Applied AI','Physical and data-driven modelling','R&D project leadership','Digital product development','Decision-support systems','Cross-functional technical leadership','Scientific and technical coordination','Research-to-product transition','Multidisciplinary problem solving','Stakeholder and partner alignment','International collaborative projects'] %}<span>{{ item }}</span>{% endfor %}</div>
+  </section>
 
-        <article class="skill-card">
-            <h3>AI, data &amp; modelling</h3>
-            <ul class="skill-list">
-                <li>Applied AI and machine learning</li>
-                <li>Mobility analytics and geospatial data</li>
-                <li>Environmental modelling, simulation, and uncertainty handling</li>
-                <li>Scientific-model productization through APIs and workflows</li>
-            </ul>
-        </article>
-
-        <article class="skill-card">
-            <h3>Software &amp; engineering stack</h3>
-            <div class="icon-list">
-                <i class="fab fa-python"></i>
-                <i class="fab fa-js-square"></i>
-                <i class="fab fa-github"></i>
-                <i class="fas fa-database"></i>
-                <i class="fas fa-chart-line"></i>
-                <i class="fas fa-microchip"></i>
-            </div>
-            <p>Python, Matlab / Simulink, REST APIs, MongoDB, Git / GitLab, data pipelines, dashboards, Streamlit, Plotly, software-intensive R&amp;D, and control-oriented engineering environments.</p>
-        </article>
-
-        <article class="skill-card">
-            <h3>Communication &amp; international work</h3>
-            <ul class="skill-list">
-                <li>Workshops and demonstrations with users, partners, and public stakeholders</li>
-                <li>Collaborative-project structuring and multi-partner coordination</li>
-                <li>French: native · English: fluent · Spanish: basic</li>
-                <li>Comfortable in cross-disciplinary and international contexts</li>
-            </ul>
-        </article>
+  <section class="skill-tier">
+    <p class="skill-tier-label">{{ 'Niveau 2 · Compétences techniques établies' if lang == 'fr' else 'Level 2 · Well-established technical capabilities' }}</p>
+    <div class="skills-inventory-grid">
+      <article><h3>{{ 'Architecture scientifique et ingénierie système' if lang == 'fr' else 'Scientific architecture and systems engineering' }}</h3><p>System-level design · Requirements definition · Functional and technical architecture · Model and software integration · Algorithm-to-product integration · Proof-of-concept development · Technology maturation · Technical trade-off and risk analysis · Model validation · Experimental design · Scenario analysis · Uncertainty handling · Robust solution design</p></article>
+      <article><h3>{{ 'IA appliquée et data science' if lang == 'fr' else 'Applied AI and data science' }}</h3><p>Applied machine learning · Supervised learning · Regression modelling · Neural-network-based and surrogate modelling · Feature engineering · Model training and evaluation · Data preprocessing and quality analysis · Data pipelines · Scientific, time-series and geospatial analysis · Spatial downscaling · KPI definition · Interactive analytics · Data-product development</p></article>
+      <article><h3>{{ 'Modélisation, automatique et signal' if lang == 'fr' else 'Modelling, control and signal processing' }}</h3><p>Physical, dynamic and mathematical modelling · System identification · Signal processing · Linear and nonlinear control · Optimal, predictive and adaptive control · Guidance, navigation and control · Simulation · Sensor-based control · Optic-flow navigation · Bio-inspired robotics · UAV and lunar-landing guidance · Wind and wave-energy control · LiDAR-assisted control</p></article>
+      <article><h3>{{ 'Mobilité, émissions et qualité de l’air' if lang == 'fr' else 'Mobility, emissions and air quality' }}</h3><p>Connected and sustainable mobility · Transport-emissions and vehicle-energy modelling · Eco-driving analytics · Road-traffic and vehicle-fleet modelling · COPERT-based modelling · Air-quality and atmospheric-dispersion workflows · Exposure assessment · Noise mapping · Environmental impact assessment · Low-emission-zone, speed-policy and infrastructure scenarios · Airport and port environmental modelling · Public-policy decision support</p></article>
+      <article><h3>{{ 'Données géospatiales' if lang == 'fr' else 'Geospatial data' }}</h3><p>Geospatial analytics · GIS processing · Spatial data modelling · Road-network data · Vector and raster processing · Spatial aggregation and downscaling · Geospatial visualisation · Interactive mapping · GeoJSON · OpenStreetMap and HERE road data · Geographic APIs · Polygon and bounding-box processing · Map-based decision-support tools</p></article>
+      <article><h3>{{ 'Logiciels et plateformes de données' if lang == 'fr' else 'Software and data platforms' }}</h3><p>Python · REST APIs · Web services · API design and integration · Flask · Streamlit · Plotly · Pandas · NumPy · Scikit-learn · MongoDB · JSON and GeoJSON · SQL fundamentals · SQLite · Git and GitLab · Data dashboards · Interactive web applications · Scientific-software prototyping · IoT data integration · Automated collection and scheduled workflows</p></article>
     </div>
+  </section>
+
+  <section class="skill-tier">
+    <p class="skill-tier-label">{{ 'Niveau 2 · Produit, programmes et communication' if lang == 'fr' else 'Level 2 · Product, programs and communication' }}</p>
+    <div class="skills-inventory-grid">
+      <article><h3>{{ 'Produits numériques' if lang == 'fr' else 'Digital products' }}</h3><p>Digital product strategy · Product vision and roadmap · Product requirements and functional specifications · Feature prioritisation · Product and data-product architecture · Scientific-product development · Dashboard design · KPI-driven delivery · Mobile and web-application coordination · API-product development · User-facing scientific tools · Product modernisation · Operational deployment of research outputs</p></article>
+      <article><h3>{{ 'Pilotage R&D' if lang == 'fr' else 'R&D leadership' }}</h3><p>R&D and technical-program management · Innovation-project management · Project, resource and risk planning · Dependency and deliverable coordination · Technical decision-making · Roadmap management · Contractor coordination · Intellectual-property and patent contribution · Research partnerships · Consortium structuring · Public-private and international collaboration · Cross-functional leadership of multidisciplinary MSc, PhD, software, data and modelling contributors</p></article>
+      <article><h3>{{ 'Communication et transmission' if lang == 'fr' else 'Communication and knowledge transfer' }}</h3><p>Scientific and technical communication · Research publications · Conference presentations · Workshop facilitation · Technical and product documentation · Executive technical synthesis · Complex-topic simplification · Scientific storytelling · Teaching and mentoring · Knowledge transfer · Communication with technical, non-technical, institutional and public stakeholders</p></article>
+      <article><h3>{{ 'Leadership et collaboration' if lang == 'fr' else 'Leadership and collaboration' }}</h3><p>Systems thinking · Scientific rigor · Evidence-based decision-making · Decision-making under uncertainty · Technical leadership · Influence without formal authority · Team facilitation · Mentoring · Strategic and product thinking · Prioritisation · Stakeholder alignment · Cross-disciplinary and international collaboration · Consensus building · Interface management · Clear communication</p></article>
+    </div>
+  </section>
+
+  <section class="skill-tier skill-tier-operational">
+    <p class="skill-tier-label">{{ 'Niveau 3 · Compétences opérationnelles, à présenter avec nuance' if lang == 'fr' else 'Level 3 · Operational capabilities, to state with nuance' }}</p>
+    <p>{{ 'Ces pratiques sont mobilisables, sans être présentées comme des expertises de plateforme ou d’infrastructure.' if lang == 'fr' else 'These practices are usable, without being presented as platform or infrastructure expertise.' }}</p>
+    <div class="skill-tags"><span>Airflow workflow development</span><span>Workflow orchestration</span><span>GitHub and GitHub Actions</span><span>pytest · pre-commit · Black · isort · Flake8</span><span>CI/CD fundamentals</span><span>DevSecOps fundamentals</span><span>Basic automated security checks</span><span>Docker fundamentals</span><span>MLflow fundamentals</span><span>Practical data-platform prototyping</span><span>PostgreSQL fundamentals</span><span>Supabase</span><span>Cron and scheduled jobs</span><span>API reverse engineering</span><span>Batch experiment preparation</span><span>HPC experiment planning</span><span>Command-line development workflows</span><span>Frontend coordination and architecture exposure</span><span>Mobile product coordination</span></div>
+  </section>
+
+  <section class="skill-tier skill-tier-boundary">
+    <p class="skill-tier-label">{{ 'Langues et contexte international' if lang == 'fr' else 'Languages and international context' }}</p>
+    <p><strong>{{ 'Langues :' if lang == 'fr' else 'Languages:' }}</strong> {{ 'français natif · anglais professionnel · collaboration internationale et multiculturelle.' if lang == 'fr' else 'French native · English professional working proficiency · international and multicultural collaboration.' }}</p>
+  </section>
 </div>

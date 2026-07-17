@@ -57,8 +57,9 @@ def education():
     return render_section('education.html')
 
 @app.route('/skills')
+@app.route('/skills/')
 def skills():
-    return render_section('skills.html')
+    return render_template('skills_page.html', lang=page_language())
 
 @app.route('/references')
 def references():
