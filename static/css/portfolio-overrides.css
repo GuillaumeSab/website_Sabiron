@@ -124,7 +124,8 @@ html[lang="fr"] .travel-map::before { content:"Carte de voyages personnels"; }
 .form-status { min-height:1.4em; margin:0; color:#d8f0e9!important; font-weight:650; }
 .honeypot { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
 .social-links { display:flex; gap:.55rem; }
-.social-links a { display:grid; width:44px; height:44px; place-items:center; border:1px solid rgba(255,255,255,.5); border-radius:50%; }
+.social-links a { display:grid; width:44px; height:44px; place-items:center; border:1px solid rgba(255,255,255,.7); border-radius:50%; color:#fff; font-weight:800; text-decoration:none; }
+.social-links a:hover,.social-links a:focus-visible { border-color:#fff; background:rgba(255,255,255,.12); color:#fff; }
 .social-links svg { width:28px; height:28px; fill:#fff; }
 .social-links text { fill:#0d355c; font:700 15px ui-sans-serif,system-ui; text-anchor:middle; }
 .cv-placeholders { display:grid; gap:.3rem; width:100%; color:#c9d8e7; font-size:.82rem; }
