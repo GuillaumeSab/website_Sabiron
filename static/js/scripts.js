@@ -18,6 +18,28 @@
       sessionStorage.setItem('portfolio-language-scroll', String(window.scrollY));
     }));
 
+    const travelMap = document.getElementById('travel-map');
+    if (travelMap && typeof window.Datamap !== 'undefined' && typeof window.d3 !== 'undefined') {
+      const countries = Object.fromEntries((travelMap.dataset.countries || '').split(',').filter(Boolean).map((code) => [code, { fillKey: 'visited' }]));
+      const renderTravelMap = () => {
+        travelMap.replaceChildren();
+        new window.Datamap({
+          element: travelMap,
+          responsive: true,
+          height: travelMap.clientHeight || 260,
+          fills: { defaultFill: '#d7e4ea', visited: '#176d60' },
+          data: countries,
+          geographyConfig: {
+            borderColor: '#ffffff', borderWidth: 1, highlightOnHover: true,
+            highlightFillColor: '#1f8c7a', highlightBorderColor: '#ffffff',
+            popupTemplate: (geography) => `<div class="hoverinfo"><strong>${geography.properties.name}</strong></div>`,
+          },
+        });
+      };
+      renderTravelMap();
+      window.addEventListener('resize', (() => { let timer; return () => { window.clearTimeout(timer); timer = window.setTimeout(renderTravelMap, 150); }; })());
+    }
+
     const lists = document.querySelectorAll('.publications-shell ul');
     lists.forEach((list) => {
       const heading = list.previousElementSibling?.textContent || '';

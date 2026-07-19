@@ -98,12 +98,10 @@ h3 { margin-bottom:.65rem; font-size:1.22rem; letter-spacing:-.025em; line-heigh
 .travel-map { margin:0; padding:1.3rem; border:1px solid #e4ddd0; border-radius:16px; background:#fffdf9; box-shadow:0 15px 30px rgba(56,48,34,.08); }
 .travel-map::before { display:block; margin-bottom:.7rem; color:var(--ink); font-size:1.05rem; font-weight:800; content:"Personal travel map"; }
 html[lang="fr"] .travel-map::before { content:"Carte de voyages personnels"; }
-.travel-map svg { display:block; width:100%; height:320px; border:1px solid #c6dbe8; border-radius:12px; background:linear-gradient(145deg,#edf8ff,#cfe5f4); }
-.travel-map path { fill:#b9d3b0; stroke:#769f78; stroke-width:2; }
-.travel-map .map-labels text { fill:#4f6a7d; font:600 10px ui-sans-serif,system-ui,sans-serif; text-anchor:middle; }
-.travel-map circle { fill:#d78143; stroke:#fff; stroke-width:3; }
-.map-markers g { cursor:pointer; outline:none; }
-.map-markers g:hover circle, .map-markers g:focus circle { fill:var(--blue); r:9; }
+.travel-map-canvas { position:relative; width:100%; height:320px; overflow:hidden; border:1px solid #c6dbe8; border-radius:12px; background:#e8f5fc; }
+.travel-map-canvas .datamap { width:100%; height:100%; }
+.travel-map-canvas .datamaps-subunit { cursor:pointer; }
+.travel-map-canvas .datamaps-hoverover { padding:.45rem .6rem; border:1px solid var(--line); border-radius:7px; background:#fff; color:var(--ink); font-size:.8rem; box-shadow:0 4px 12px rgba(16,36,62,.14); }
 .travel-map figcaption { margin-top:.8rem; color:#6b665d; font-size:.85rem; line-height:1.45; }
 .cv-section { background:#eaf3f8; }
 .cv-layout { display:flex; justify-content:space-between; gap:2rem; align-items:center; }
@@ -188,8 +186,8 @@ footer { padding:1.4rem 0; background:#082743; color:#c9d8e7; font-size:.86rem; 
 .publication-grid a { margin-top:1rem; font-weight:750; }
 .travel-map::before { content:"Personal travel map"; }
 html[lang="fr"] .travel-map::before { content:"Carte de voyages personnels"; }
-.travel-map svg { height:260px; }
-@media (max-width:800px) { :root{--header-height:64px}.site-header{min-height:var(--header-height);padding-inline:1.25rem}.menu-button{display:block}.site-menu{position:absolute;top:calc(100% + 1px);left:0;right:0;display:none;align-items:stretch;gap:0;padding:.75rem 1.25rem 1rem;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 15px 25px rgba(16,36,62,.09)}.site-menu.is-open{display:flex;flex-direction:column}.site-menu>a{min-height:44px}.language-switcher{align-self:flex-start}.hero-grid,.split,.contact-layout,.project-case,.project-case-planetair{grid-template-columns:1fr;gap:2rem}.hero-profile{display:none}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:2.5rem}.work-grid,.insight-grid,.three-up,.background-journey,.skills-inventory-grid,.secondary-projects,.capability-grid,.publication-grid{grid-template-columns:1fr}.background-journey::before{top:1.4rem;bottom:1.4rem;left:1.5rem;width:2px;height:auto}.case-study:first-child{grid-column:auto}.approach-grid{grid-template-columns:1fr 1fr}.approach-grid article{padding:1.1rem}.system-flow{grid-template-columns:1fr}.system-flow li:not(:last-child)::after{top:auto;right:auto;bottom:-.9rem;left:50%;transform:translateX(-50%) rotate(90deg)}.travel-map svg{height:230px}.cv-layout{align-items:flex-start;flex-direction:column}.section{padding:3.5rem 0} }
+.travel-map-canvas { height:260px; }
+@media (max-width:800px) { :root{--header-height:64px}.site-header{min-height:var(--header-height);padding-inline:1.25rem}.menu-button{display:block}.site-menu{position:absolute;top:calc(100% + 1px);left:0;right:0;display:none;align-items:stretch;gap:0;padding:.75rem 1.25rem 1rem;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 15px 25px rgba(16,36,62,.09)}.site-menu.is-open{display:flex;flex-direction:column}.site-menu>a{min-height:44px}.language-switcher{align-self:flex-start}.hero-grid,.split,.contact-layout,.project-case,.project-case-planetair{grid-template-columns:1fr;gap:2rem}.hero-profile{display:none}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:2.5rem}.work-grid,.insight-grid,.three-up,.background-journey,.skills-inventory-grid,.secondary-projects,.capability-grid,.publication-grid{grid-template-columns:1fr}.background-journey::before{top:1.4rem;bottom:1.4rem;left:1.5rem;width:2px;height:auto}.case-study:first-child{grid-column:auto}.approach-grid{grid-template-columns:1fr 1fr}.approach-grid article{padding:1.1rem}.system-flow{grid-template-columns:1fr}.system-flow li:not(:last-child)::after{top:auto;right:auto;bottom:-.9rem;left:50%;transform:translateX(-50%) rotate(90deg)}.travel-map-canvas{height:230px}.cv-layout{align-items:flex-start;flex-direction:column}.section{padding:3.5rem 0} }
 @media (max-width:380px) { .content{width:min(100% - 2rem,1160px)}.metrics{grid-template-columns:1fr}.approach-grid{grid-template-columns:1fr}.actions .button{width:100%}h1{font-size:3.2rem} }
 @media (max-width:800px) { .site-menu.site-menu-static { position:static; display:flex; flex-direction:row; width:auto; gap:.45rem; padding:0; border:0; box-shadow:none; background:transparent; } .site-menu-static > a { display:inline-flex; font-size:.78rem; } .site-menu-static .language-switcher { margin:0; } }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important} .publication-track,.skills-cloud > div{width:auto;flex-wrap:wrap;transform:none!important} }
