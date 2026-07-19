@@ -88,5 +88,22 @@
     const closeVideo = () => { dialog?.close(); container?.replaceChildren(); };
     close?.addEventListener('click', closeVideo);
     dialog?.addEventListener('close', () => container?.replaceChildren());
+
+    document.querySelectorAll('[data-contact-form]').forEach((form) => form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const status = form.querySelector('[data-contact-status]');
+      const button = form.querySelector('button[type="submit"]');
+      const french = document.documentElement.lang === 'fr';
+      if (button) button.disabled = true;
+      if (status) status.textContent = french ? 'Envoi en cours…' : 'Sending…';
+      try {
+        const response = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        if (!response.ok) throw new Error('Form submission failed');
+        form.reset();
+        if (status) status.textContent = french ? 'Merci, votre message a bien été envoyé.' : 'Thank you, your message has been sent.';
+      } catch (_) {
+        if (status) status.textContent = french ? 'L’envoi a échoué. Réessayez dans un instant.' : 'Sending failed. Please try again shortly.';
+      } finally { if (button) button.disabled = false; }
+    }));
   });
 })();
