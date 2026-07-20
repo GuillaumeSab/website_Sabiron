@@ -24,7 +24,7 @@
       const categoryLabel = (value) => ({ personal: language === 'fr' ? 'Personnel' : 'Personal travel', education: language === 'fr' ? 'Études' : 'Education', professional: language === 'fr' ? 'Professionnel' : 'Professional' })[value];
       const loadMapLibre = () => new Promise((resolve, reject) => {
         if (window.maplibregl) return resolve(window.maplibregl);
-        const script = document.createElement('script'); script.src = 'https://unpkg.com/maplibre-gl@^5.24.0/dist/maplibre-gl.js'; script.onload = () => resolve(window.maplibregl); script.onerror = reject; document.head.append(script);
+        const script = document.createElement('script'); script.src = `${document.documentElement.dataset.staticRoot || '/static'}/vendor/maplibre-gl.js`; script.onload = () => window.maplibregl ? resolve(window.maplibregl) : reject(new Error('Map library unavailable')); script.onerror = () => reject(new Error('Map library could not load')); document.head.append(script);
       });
       const startMap = async () => {
         try {
