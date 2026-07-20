@@ -38,6 +38,7 @@
           map.addControl(new maplibregl.NavigationControl(), 'top-right'); map.addControl(new maplibregl.FullscreenControl(), 'top-right');
           const bounds = new maplibregl.LngLatBounds(); points.features.forEach((feature) => bounds.extend(feature.geometry.coordinates));
           const fit = () => map.fitBounds(bounds, { padding: 52, maxZoom: 4, duration: reducedMotion ? 0 : 500 });
+          const showWorld = () => map.fitBounds([[-180, -58], [180, 82]], { padding: 28, duration: 0 });
           map.on('load', () => {
             map.addSource('travel-countries', { type: 'geojson', data: polygons }); map.addSource('travel-places', { type: 'geojson', data: points });
             map.addLayer({ id: 'travel-country-fill', type: 'fill', source: 'travel-countries', paint: { 'fill-color': ['match', ['get', 'category'], 'education', '#2f77bc', '#1a907f'], 'fill-opacity': .52 } });
@@ -46,7 +47,7 @@
             const popup = new maplibregl.Popup({ closeButton: true, closeOnClick: true });
             map.on('click', 'travel-place', (event) => { const p = event.features[0].properties; popup.setLngLat(event.lngLat).setHTML(`<strong>${p.city}</strong><br>${p.category_label}<br>${p.period}<br>${language === 'fr' ? p.label_fr : p.label_en}`).addTo(map); });
             map.on('click', 'travel-country-fill', (event) => { const name = event.features[0].properties.name; const country = countries.find((item) => item.name_en === name || aliases[item.name_en] === name); popup.setLngLat(event.lngLat).setHTML(`<strong>${language === 'fr' ? country.name_fr : country.name_en}</strong><br>${categoryLabel(country.category)}`).addTo(map); });
-            ['travel-place', 'travel-country-fill'].forEach((id) => { map.on('mouseenter', id, () => map.getCanvas().style.cursor = 'pointer'); map.on('mouseleave', id, () => map.getCanvas().style.cursor = ''); }); fit();
+            ['travel-place', 'travel-country-fill'].forEach((id) => { map.on('mouseenter', id, () => map.getCanvas().style.cursor = 'pointer'); map.on('mouseleave', id, () => map.getCanvas().style.cursor = ''); }); showWorld();
             document.querySelectorAll('[data-map-filter]').forEach((button) => button.addEventListener('click', () => { const value = button.dataset.mapFilter; map.setFilter('travel-country-fill', value === 'all' ? null : ['==', ['get', 'category'], value]); map.setFilter('travel-country-line', value === 'all' ? null : ['==', ['get', 'category'], value]); map.setFilter('travel-place', value === 'all' ? null : ['==', ['get', 'category'], value]); document.querySelectorAll('[data-map-filter]').forEach((item) => item.classList.toggle('is-active', item === button)); }));
             document.querySelector('[data-map-fit]')?.addEventListener('click', fit);
           });
