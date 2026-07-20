@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><linearGradient id="b" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#082743"/><stop offset="1" stop-color="#07549a"/></linearGradient><clipPath id="p"><circle cx="982" cy="315" r="168"/></clipPath></defs>
+  <rect width="1200" height="630" fill="url(#b)"/>
+  <circle cx="982" cy="315" r="184" fill="none" stroke="#9ed0f2" stroke-width="8" opacity=".7"/>
+  <image href="GS2.png" x="814" y="147" width="336" height="370" preserveAspectRatio="xMidYMid slice" clip-path="url(#p)"/>
+  <text x="80" y="178" fill="#9ed0f2" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="3">ENGINEER · PHD · SCIENTIFIC SYSTEMS ARCHITECT</text>
+  <text x="80" y="290" fill="white" font-family="Arial, sans-serif" font-size="72" font-weight="700">Guillaume Sabiron</text>
+  <text x="80" y="370" fill="white" font-family="Arial, sans-serif" font-size="38" font-weight="700">R&amp;D &amp; Scientific Product Leader</text>
+  <text x="80" y="430" fill="#d7e9f7" font-family="Arial, sans-serif" font-size="28">Applied AI · Data platforms · Complex systems</text>
+  <rect x="80" y="496" width="522" height="4" rx="2" fill="#9ed0f2"/>
+  <text x="80" y="548" fill="#d7e9f7" font-family="Arial, sans-serif" font-size="24">Turning scientific complexity into deployable products.</text>
+</svg>

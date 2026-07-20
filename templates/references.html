@@ -7,7 +7,7 @@
     <div class="publication-filters" role="group" aria-label="{{ 'Filtrer les publications par type' if lang == 'fr' else 'Filter publications by type' }}">
         <button class="publication-filter is-active" type="button" data-publication-filter="all" aria-pressed="true">{{ 'Tout' if lang == 'fr' else 'All' }}</button>
         <button class="publication-filter" type="button" data-publication-filter="paper" aria-pressed="false">{{ 'Articles de revue' if lang == 'fr' else 'Journal papers' }}</button>
-        <button class="publication-filter" type="button" data-publication-filter="conference" aria-pressed="false">{{ 'Conférences' }}</button>
+        <button class="publication-filter" type="button" data-publication-filter="conference" aria-pressed="false">{{ 'Conférences' if lang == 'fr' else 'Conferences' }}</button>
         <button class="publication-filter" type="button" data-publication-filter="book" aria-pressed="false">{{ 'Chapitres d’ouvrage' if lang == 'fr' else 'Book chapters' }}</button>
         <button class="publication-filter" type="button" data-publication-filter="patent" aria-pressed="false">{{ 'Brevets' if lang == 'fr' else 'Patents' }}</button>
         <button class="publication-filter" type="button" data-publication-filter="thesis" aria-pressed="false">{{ 'Thèse' if lang == 'fr' else 'Thesis' }}</button>

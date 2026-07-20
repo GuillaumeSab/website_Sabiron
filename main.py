@@ -2,6 +2,13 @@ from flask import Flask, render_template, request
 from site_content import CAPABILITIES, METRICS, PROJECTS, featured_publications, travel_countries
 
 app = Flask(__name__)
+SITE_URL = "https://guillaumesabiron.github.io"
+
+
+@app.context_processor
+def global_template_data() -> dict[str, str]:
+    """Public, canonical site settings shared by every static page."""
+    return {"site_url": SITE_URL}
 def page_language() -> str:
     """Return the supported language requested by the visitor.
 

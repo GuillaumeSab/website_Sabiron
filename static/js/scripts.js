@@ -18,26 +18,45 @@
       sessionStorage.setItem('portfolio-language-scroll', String(window.scrollY));
     }));
 
-    const travelMap = document.getElementById('travel-map');
-    if (travelMap && typeof window.Datamap !== 'undefined' && typeof window.d3 !== 'undefined') {
-      const countries = Object.fromEntries((travelMap.dataset.countries || '').split(',').filter(Boolean).map((code) => [code, { fillKey: 'visited' }]));
-      const renderTravelMap = () => {
-        travelMap.replaceChildren();
-        new window.Datamap({
-          element: travelMap,
-          responsive: true,
-          height: travelMap.clientHeight || 260,
-          fills: { defaultFill: '#d7e4ea', visited: '#176d60' },
-          data: countries,
-          geographyConfig: {
-            borderColor: '#ffffff', borderWidth: 1, highlightOnHover: true,
-            highlightFillColor: '#1f8c7a', highlightBorderColor: '#ffffff',
-            popupTemplate: (geography) => `<div class="hoverinfo"><strong>${geography.properties.name}</strong></div>`,
-          },
-        });
+    const travelMap = document.querySelector('[data-travel-map]');
+    if (travelMap) {
+      const locations = JSON.parse(travelMap.dataset.locations || '[]');
+      const positions = {
+        CAN: [19, 30], USA: [23, 44], CHL: [28, 74], ALB: [52, 38], DNK: [50, 30],
+        NOR: [48, 23], SWE: [51, 25], ITA: [53, 43], GRC: [55, 45], TUN: [48, 51],
+        MAR: [43, 52], EGY: [59, 53], TUR: [59, 42], IND: [70, 52], CHN: [78, 40], KOR: [84, 41],
       };
-      renderTravelMap();
-      window.addEventListener('resize', (() => { let timer; return () => { window.clearTimeout(timer); timer = window.setTimeout(renderTravelMap, 150); }; })());
+      const language = document.documentElement.lang;
+      const detail = document.createElement('p');
+      detail.className = 'travel-map-detail';
+      detail.setAttribute('aria-live', 'polite');
+      detail.textContent = language === 'fr' ? 'Sélectionnez un pays pour afficher sa catégorie.' : 'Select a country to view its category.';
+      const points = document.createElement('div');
+      points.className = 'travel-map-points';
+      locations.forEach((location) => {
+        const point = positions[location.code];
+        if (!point) return;
+        const button = document.createElement('button');
+        const personal = location.category === 'personal-travel';
+        const name = location[`name_${language}`] || location.name_en;
+        const category = personal
+          ? (language === 'fr' ? 'Voyage personnel' : 'Personal travel')
+          : (language === 'fr' ? 'Études' : 'Education');
+        button.type = 'button';
+        button.className = `travel-point ${personal ? 'is-personal' : 'is-education'}`;
+        button.style.left = `${point[0]}%`;
+        button.style.top = `${point[1]}%`;
+        button.setAttribute('aria-label', `${name} — ${category}`);
+        button.dataset.travelName = name;
+        button.dataset.travelCategory = category;
+        button.addEventListener('click', () => {
+          points.querySelectorAll('.travel-point').forEach((item) => item.classList.remove('is-selected'));
+          button.classList.add('is-selected');
+          detail.textContent = `${name} — ${category}`;
+        });
+        points.append(button);
+      });
+      travelMap.replaceChildren(points, detail);
     }
 
     const lists = document.querySelectorAll('.publications-shell ul');
@@ -94,22 +113,52 @@
       backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' }));
     }
 
-    const dialog = document.querySelector('[data-video-dialog]');
-    const container = document.querySelector('[data-video-container]');
-    const close = document.querySelector('[data-video-close]');
-    document.querySelectorAll('[data-video-button]').forEach((button) => button.addEventListener('click', () => {
-      if (!dialog || !container) return;
-      const iframe = document.createElement('iframe');
-      iframe.src = `${button.dataset.videoSrc}?autoplay=1`;
-      iframe.title = button.dataset.videoTitle || '';
-      iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
-      iframe.allowFullscreen = true;
-      container.replaceChildren(iframe);
+    const dialog = document.querySelector('[data-media-dialog]');
+    const container = document.querySelector('[data-media-container]');
+    const title = document.querySelector('[data-media-title]');
+    const close = document.querySelector('[data-media-close]');
+    let mediaTrigger = null;
+    const closeMedia = () => dialog?.close();
+    const openMedia = (kind, source, label, trigger) => {
+      if (!dialog || !container || !source) return;
+      mediaTrigger = trigger;
+      if (title) title.textContent = label || (kind === 'video' ? 'Video' : 'Image');
+      const element = document.createElement(kind === 'video' ? 'iframe' : 'img');
+      if (kind === 'video') {
+        element.src = `${source}?autoplay=1`;
+        element.title = label || '';
+        element.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+        element.allowFullscreen = true;
+      } else {
+        element.src = source;
+        element.alt = label || '';
+        element.className = 'media-dialog-image';
+      }
+      container.replaceChildren(element);
       dialog.showModal();
+      close?.focus();
+    };
+    document.querySelectorAll('[data-video-button]').forEach((button) => button.addEventListener('click', () => {
+      openMedia('video', button.dataset.videoSrc, button.dataset.videoTitle, button);
     }));
-    const closeVideo = () => { dialog?.close(); container?.replaceChildren(); };
-    close?.addEventListener('click', closeVideo);
-    dialog?.addEventListener('close', () => container?.replaceChildren());
+    document.querySelectorAll('.project-visual').forEach((image) => {
+      image.classList.add('is-zoomable');
+      image.tabIndex = 0;
+      image.setAttribute('role', 'button');
+      image.setAttribute('aria-label', `${image.alt}. ${document.documentElement.lang === 'fr' ? 'Agrandir l’image' : 'Open larger image'}`);
+      const showImage = () => openMedia('image', image.currentSrc || image.src, image.alt, image);
+      image.addEventListener('click', showImage);
+      image.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); showImage(); }
+      });
+    });
+    close?.addEventListener('click', closeMedia);
+    dialog?.addEventListener('click', (event) => { if (event.target === dialog) closeMedia(); });
+    dialog?.addEventListener('close', () => {
+      container?.replaceChildren();
+      mediaTrigger?.focus();
+      mediaTrigger = null;
+    });
 
     document.querySelectorAll('[data-contact-form]').forEach((form) => form.addEventListener('submit', async (event) => {
       event.preventDefault();

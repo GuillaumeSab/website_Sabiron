@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://guillaumesabiron.github.io/sitemap.xml

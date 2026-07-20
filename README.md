@@ -6,7 +6,7 @@ Bilingual Flask and static portfolio presenting R&D leadership, applied AI, scie
 
 The public portfolio is available at:
 
-<https://guillaumesab.github.io/website_Sabiron/>
+<https://guillaumesabiron.github.io/>
 
 GitHub Pages deploys the static site automatically after every push to `main`.
 
@@ -16,7 +16,7 @@ GitHub Pages deploys the static site automatically after every push to `main`.
 ./.venv/bin/python main.py
 ```
 
-Open `http://127.0.0.1:5000` (French: `?lang=fr`).
+Open `http://127.0.0.1:5000` (French: `http://127.0.0.1:5000/?lang=fr`).
 
 ## Build and checks
 
@@ -45,9 +45,13 @@ To add a project, define its bilingual text, image alt text, public links and im
 - Flask and Jinja for local rendering
 - native HTML, CSS and JavaScript
 - static export in `docs/`
-- no frontend framework or database; the travel map uses the bundled local Datamaps assets
+- no frontend framework or database; the travel map is a lightweight local SVG-style interaction
 
 GitHub Actions runs static checks and deploys GitHub Pages on pushes to `main`.
+
+## Search engines
+
+The static build generates canonical URLs, reciprocal language alternatives, `sitemap.xml`, `robots.txt` and an Open Graph image. Submit `https://guillaumesabiron.github.io/sitemap.xml` in [Google Search Console](https://search.google.com/search-console/) and [Bing Webmaster Tools](https://www.bing.com/webmasters/), then validate the public home page with Google’s Rich Results Test. Do not add verification tokens to the repository unless they are issued for this domain.
 
 ## Before publication
 

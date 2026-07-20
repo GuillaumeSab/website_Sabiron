@@ -36,6 +36,8 @@ def main() -> int:
         root / "404.html",
         root / "fr" / "404.html",
     ]
+    english_pages = {root / "index.html", root / "skills" / "index.html", root / "publications" / "index.html"}
+    french_pages = {root / "fr" / "index.html", root / "fr" / "skills" / "index.html", root / "fr" / "publications" / "index.html"}
     errors: list[str] = []
     for page in pages:
         if not page.exists():
@@ -56,6 +58,20 @@ def main() -> int:
             errors.append(f"{page.relative_to(root)}: contains retired animated component")
         if "<title>" not in html or 'name="description"' not in html:
             errors.append(f"{page.relative_to(root)}: missing title or description")
+        if page not in {root / "404.html", root / "fr" / "404.html"}:
+            for required in ('rel="canonical"', 'property="og:url"', 'property="og:image"', 'hreflang="en"', 'hreflang="fr"'):
+                if required not in html:
+                    errors.append(f"{page.relative_to(root)}: missing SEO metadata {required}")
+            if 'https://guillaumesabiron.github.io' not in html:
+                errors.append(f"{page.relative_to(root)}: SEO URLs are not absolute")
+        if page in english_pages and (">Conférences<" in html or "Retour au site" in html):
+            errors.append(f"{page.relative_to(root)}: contains French UI label")
+        if page in french_pages and (">Conferences<" in html or "Back to site" in html):
+            errors.append(f"{page.relative_to(root)}: contains English UI label")
+        if '?lang=' in html:
+            errors.append(f"{page.relative_to(root)}: query-string language link remains")
+        if '<ul></ul>' in html:
+            errors.append(f"{page.relative_to(root)}: empty list remains")
     required_assets = [
         root / "static" / "documents" / "guillaume-sabiron-cv-en.pdf",
         root / "static" / "documents" / "guillaume-sabiron-cv-fr.pdf",
@@ -65,6 +81,9 @@ def main() -> int:
         root / "static" / "img" / "projects" / "phd-lunar-landing-project.avif",
     ]
     errors.extend(f"missing generated asset: {asset.relative_to(root)}" for asset in required_assets if not asset.exists())
+    for asset in (root / "robots.txt", root / "sitemap.xml", root / "static" / "img" / "og-guillaume-sabiron.png"):
+        if not asset.exists():
+            errors.append(f"missing generated SEO asset: {asset.relative_to(root)}")
     if errors:
         print("Static-site checks failed:", *errors, sep="\n- ")
         return 1
