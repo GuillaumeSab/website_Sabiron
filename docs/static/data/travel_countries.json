@@ -36,7 +36,7 @@
     {"code":"VNM","name_en":"Vietnam","name_fr":"Viêt Nam","categories":["professional","lived"],"display_on_map":true}
   ],
   "places": [
-    {"id":"edmonton","longitude":-113.4938,"latitude":53.5461,"categories":["personal","professional"],"city":"Edmonton","country_code":"CAN","period":"","label_en":"Alberta","label_fr":"Alberta"},
+    {"id":"calgary","longitude":-114.0719,"latitude":51.0447,"categories":["personal","professional"],"city":"Calgary","country_code":"CAN","period":"","label_en":"Alberta","label_fr":"Alberta"},
     {"id":"montreal","longitude":-73.5673,"latitude":45.5017,"categories":["personal","professional"],"city":"Montréal","country_code":"CAN","period":"","label_en":"Canada","label_fr":"Canada"},
     {"id":"santiago","longitude":-70.6693,"latitude":-33.4489,"categories":["personal"],"city":"Santiago","country_code":"CHL","period":"","label_en":"Chile","label_fr":"Chili"},
     {"id":"valparaiso","longitude":-71.6127,"latitude":-33.0472,"categories":["personal"],"city":"Valparaíso","country_code":"CHL","period":"","label_en":"Chile","label_fr":"Chili"},
