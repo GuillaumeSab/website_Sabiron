@@ -80,6 +80,7 @@
     {"id":"lisbon","longitude":-9.1393,"latitude":38.7223,"categories":["personal"],"city":"Lisbonne","country_code":"PRT","period":"","label_en":"Portugal","label_fr":"Portugal"},
     {"id":"porto","longitude":-8.6291,"latitude":41.1579,"categories":["personal"],"city":"Porto","country_code":"PRT","period":"","label_en":"Portugal","label_fr":"Portugal"},
     {"id":"faro","longitude":-7.9304,"latitude":37.0194,"categories":["personal"],"city":"Faro","country_code":"PRT","period":"","label_en":"Portugal","label_fr":"Portugal"},
+    {"id":"reunion","longitude":55.5364,"latitude":-21.1151,"categories":["personal"],"city":"La Réunion","country_code":"REU","period":"","label_en":"Réunion island","label_fr":"Île de La Réunion"},
     {"id":"leiden","longitude":4.497,"latitude":52.1601,"categories":["personal"],"city":"Leyde","country_code":"NLD","period":"","label_en":"Netherlands","label_fr":"Pays-Bas"},
     {"id":"amsterdam","longitude":4.9041,"latitude":52.3676,"categories":["personal"],"city":"Amsterdam","country_code":"NLD","period":"","label_en":"Netherlands","label_fr":"Pays-Bas"},
     {"id":"dublin","longitude":-6.2603,"latitude":53.3498,"categories":["professional"],"city":"Dublin","country_code":"IRL","period":"","label_en":"Ireland","label_fr":"Irlande"},
