@@ -130,10 +130,18 @@
     const menuButton = document.querySelector('[data-menu-button]');
     const menu = document.querySelector('[data-site-menu]');
     if (menuButton && menu) {
-      const closeMenu = () => { menu.classList.remove('is-open'); menuButton.setAttribute('aria-expanded', 'false'); };
-      menuButton.addEventListener('click', () => {
-        const isOpen = menu.classList.toggle('is-open');
+      const menuLabel = (isOpen) => document.documentElement.lang === 'fr'
+        ? (isOpen ? 'Fermer le menu' : 'Ouvrir le menu')
+        : (isOpen ? 'Close menu' : 'Open menu');
+      const setMenuState = (isOpen) => {
+        menu.classList.toggle('is-open', isOpen);
         menuButton.setAttribute('aria-expanded', String(isOpen));
+        menuButton.setAttribute('aria-label', menuLabel(isOpen));
+      };
+      const closeMenu = () => setMenuState(false);
+      setMenuState(false);
+      menuButton.addEventListener('click', () => {
+        setMenuState(!menu.classList.contains('is-open'));
       });
       menu.querySelectorAll('a[href^="#"]').forEach((link) => link.addEventListener('click', closeMenu));
       document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeMenu(); });

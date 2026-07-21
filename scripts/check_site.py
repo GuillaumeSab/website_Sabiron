@@ -58,8 +58,11 @@ def main() -> int:
             errors.append(f"{page.relative_to(root)}: contains retired animated component")
         if "<title>" not in html or 'name="description"' not in html:
             errors.append(f"{page.relative_to(root)}: missing title or description")
+        expected_lang = "fr" if page in french_pages or page == root / "fr" / "404.html" else "en"
+        if f'<html lang="{expected_lang}">' not in html:
+            errors.append(f"{page.relative_to(root)}: incorrect document language")
         if page not in {root / "404.html", root / "fr" / "404.html"}:
-            for required in ('rel="canonical"', 'property="og:url"', 'property="og:image"', 'hreflang="en"', 'hreflang="fr"'):
+            for required in ('rel="canonical"', 'property="og:url"', 'property="og:image"', 'property="og:image:alt"', 'name="twitter:card"', 'name="twitter:title"', 'name="twitter:description"', 'hreflang="en"', 'hreflang="fr"'):
                 if required not in html:
                     errors.append(f"{page.relative_to(root)}: missing SEO metadata {required}")
             if 'https://guillaumesabiron.github.io' not in html:

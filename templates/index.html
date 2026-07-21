@@ -3,14 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10243e">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="description" content="{{ 'Guillaume Sabiron, responsable R&D, IA appliquée et produits numériques.' if lang == 'fr' else 'Guillaume Sabiron, R&D, applied AI and digital product leader.' }}">
   <meta name="author" content="Guillaume Sabiron">
   <link rel="canonical" href="{{ site_url }}{{ '/fr/' if lang == 'fr' else '/' }}">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Guillaume Sabiron">
+  <meta property="og:locale" content="{{ 'fr_FR' if lang == 'fr' else 'en_US' }}">
+  <meta property="og:locale:alternate" content="{{ 'en_US' if lang == 'fr' else 'fr_FR' }}">
   <meta property="og:title" content="Guillaume Sabiron · {{ 'Responsable R&D, IA appliquée et produits numériques' if lang == 'fr' else 'R&D, Applied AI & Digital Product Leader' }}">
   <meta property="og:description" content="{{ 'Transformer la complexité scientifique en produits déployables.' if lang == 'fr' else 'Turning scientific complexity into deployable products.' }}">
   <meta property="og:url" content="{{ site_url }}{{ '/fr/' if lang == 'fr' else '/' }}">
   <meta property="og:image" content="{{ site_url }}/static/img/og-guillaume-sabiron.png">
+  <meta property="og:image:alt" content="{{ 'Portrait de Guillaume Sabiron' if lang == 'fr' else 'Portrait of Guillaume Sabiron' }}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Guillaume Sabiron">
   <meta name="twitter:description" content="{{ 'Transformer la complexité scientifique en produits déployables.' if lang == 'fr' else 'Turning scientific complexity into deployable products.' }}">
@@ -19,6 +26,7 @@
   <link rel="alternate" hreflang="fr" href="{{ site_url }}/fr/">
   <link rel="alternate" hreflang="x-default" href="{{ site_url }}/">
   <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+  <link rel="preload" as="image" href="{{ url_for('static', filename='img/GS2.png') }}" fetchpriority="high">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio-overrides.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/maplibre-gl.css') }}">
   <script src="{{ url_for('static', filename='js/scripts.js') }}" defer></script>
@@ -32,10 +40,10 @@
     <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-button><span></span><span></span><span></span><span class="visually-hidden">{{ 'Ouvrir le menu' if lang == 'fr' else 'Open menu' }}</span></button>
     <nav id="site-menu" class="site-menu" aria-label="{{ 'Navigation principale' if lang == 'fr' else 'Main navigation' }}" data-site-menu>
       <a href="#work">{{ 'Réalisations' if lang == 'fr' else 'Work' }}</a><a href="#approach">{{ 'Approche' if lang == 'fr' else 'Approach' }}</a><a href="#capabilities">{{ 'Compétences' if lang == 'fr' else 'Skills' }}</a><a href="#background">{{ 'Parcours' if lang == 'fr' else 'Background' }}</a><a href="#insights">{{ 'Publications' if lang == 'fr' else 'Insights' }}</a><a href="#cv">CV</a><a href="#contact">Contact</a>
-      <span class="language-switcher" aria-label="Language selector"><a class="{{ 'is-active' if lang == 'en' else '' }}" href="{{ url_for('home', lang='en') }}" hreflang="en">EN</a><a class="{{ 'is-active' if lang == 'fr' else '' }}" href="{{ url_for('home', lang='fr') }}" hreflang="fr">FR</a></span>
+      <span class="language-switcher" aria-label="{{ 'Sélecteur de langue' if lang == 'fr' else 'Language selector' }}"><a class="{{ 'is-active' if lang == 'en' else '' }}" href="{{ url_for('home', lang='en') }}" hreflang="en" lang="en"{% if lang == 'en' %} aria-current="true"{% endif %}>EN</a><a class="{{ 'is-active' if lang == 'fr' else '' }}" href="{{ url_for('home', lang='fr') }}" hreflang="fr" lang="fr"{% if lang == 'fr' %} aria-current="true"{% endif %}>FR</a></span>
     </nav>
   </header>
-  <main id="main-content">
+  <main id="main-content" tabindex="-1">
     <section id="top" class="hero"><div class="content hero-grid"><div>
       <p class="eyebrow">{{ 'Ingénieur · Docteur · Architecte de systèmes scientifiques' if lang == 'fr' else 'Engineer · PhD · Scientific systems architect' }}</p>
       <h1>Guillaume Sabiron</h1>
@@ -43,7 +51,7 @@
       <p class="hero-statement">{{ 'Transformer la complexité scientifique en produits déployables.' if lang == 'fr' else 'Turning scientific complexity into deployable products.' }}</p>
       <p class="hero-copy">{{ 'Je pilote des programmes pluridisciplinaires reliant intelligence artificielle appliquée, modèles physiques, plateformes de données, logiciels et usages de terrain, dans la mobilité, l’environnement, l’énergie et les systèmes autonomes.' if lang == 'fr' else 'I lead multidisciplinary programs connecting applied AI, physical models, data platforms, software and real-world users across mobility, environmental intelligence, energy and autonomous systems.' }}</p>
       <div class="actions"><a class="button primary" href="#work">{{ 'Découvrir mes réalisations' if lang == 'fr' else 'View selected work' }}</a><a class="button" href="#cv">{{ 'Télécharger le CV' if lang == 'fr' else 'Download CV' }}</a><a class="button" href="https://www.linkedin.com/in/gsabiron" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="button" href="#contact">Contact</a></div>
-    </div><div class="hero-profile"><img src="{{ url_for('static', filename='img/GS2.png') }}" width="210" height="210" alt="{{ 'Portrait de Guillaume Sabiron' if lang == 'fr' else 'Portrait of Guillaume Sabiron' }}"><p>{{ 'Basé près de Lyon, France' if lang == 'fr' else 'Based near Lyon, France' }}</p></div></div>
+    </div><div class="hero-profile"><img src="{{ url_for('static', filename='img/GS2.png') }}" width="210" height="210" fetchpriority="high" decoding="async" alt="{{ 'Portrait de Guillaume Sabiron' if lang == 'fr' else 'Portrait of Guillaume Sabiron' }}"><p>{{ 'Basé près de Lyon, France' if lang == 'fr' else 'Based near Lyon, France' }}</p></div></div>
     <div class="content metrics" aria-label="{{ 'Chiffres clés' if lang == 'fr' else 'Key figures' }}">{% for metric in metrics %}<div><strong>{{ metric.value }}</strong><span>{{ metric[lang] }}</span>{% if metric.get('note_' + lang) %}<span class="metric-note">{{ metric['note_' + lang] }}</span>{% endif %}</div>{% endfor %}</div></section>
 
     <section id="work" class="section section-tint"><div class="content"><p class="eyebrow">{{ 'Réalisations sélectionnées' if lang == 'fr' else 'Featured work' }}</p><h2>{{ 'Des systèmes scientifiques aux services utiles' if lang == 'fr' else 'From scientific systems to useful services' }}</h2>
