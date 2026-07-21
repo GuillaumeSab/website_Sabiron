@@ -21,11 +21,25 @@
     const travelMap = document.querySelector('[data-travel-map]');
     if (travelMap) {
       const language = document.documentElement.lang;
-      const categoryLabel = (value) => ({ personal: language === 'fr' ? 'Personnel' : 'Personal travel', education: language === 'fr' ? 'Études' : 'Education', professional: language === 'fr' ? 'Professionnel' : 'Professional' })[value];
+      const categoryLabel = (value) => ({ personal: language === 'fr' ? 'Personnel' : 'Personal travel', education: language === 'fr' ? 'Études' : 'Education', professional: language === 'fr' ? 'Travail' : 'Professional', lived: language === 'fr' ? 'Lieux vécus' : 'Lived' })[value];
       const categoryLabels = (values) => values.map(categoryLabel).join(' · ');
       const normaliseCategories = (item) => {
         const categories = item.categories || [item.category === 'personal-travel' ? 'personal' : item.category];
-        return { ...item, categories, category: categories.includes('professional') ? 'professional' : categories.includes('education') ? 'education' : 'personal' };
+        return { ...item, categories, category: categories.includes('lived') ? 'lived' : categories.includes('professional') ? 'professional' : categories.includes('education') ? 'education' : 'personal' };
+      };
+      const visualKey = (categories) => {
+        const visualCategories = categories.filter((category) => category !== 'education');
+        return (visualCategories.length ? visualCategories : ['lived']).sort().join('-');
+      };
+      const palette = { personal: [123, 86, 187], professional: [35, 111, 189], lived: [45, 151, 99] };
+      const makePattern = (key) => {
+        const categories = key.split('-'); const size = 32; const data = new Uint8Array(size * size * 4);
+        for (let y = 0; y < size; y += 1) for (let x = 0; x < size; x += 1) {
+          const stripe = categories.length === 1 ? 0 : Math.floor((x + y) / 6) % categories.length;
+          const [red, green, blue] = palette[categories[stripe]];
+          const offset = (y * size + x) * 4; data[offset] = red; data[offset + 1] = green; data[offset + 2] = blue; data[offset + 3] = 190;
+        }
+        return { width: size, height: size, data };
       };
       const loadMapLibre = () => new Promise((resolve, reject) => {
         if (window.maplibregl) return resolve(window.maplibregl);
@@ -41,7 +55,7 @@
           });
           const selectedNames = new Set(countries.map((item) => item.name_en));
           const aliases = { 'United States': 'United States of America', 'South Korea': 'South Korea' };
-          const polygons = { type: 'FeatureCollection', features: world.features.filter((feature) => selectedNames.has(feature.properties.name) || Object.values(aliases).includes(feature.properties.name)).map((feature) => { const country = countries.find((item) => item.name_en === feature.properties.name || aliases[item.name_en] === feature.properties.name); return { ...feature, properties: { ...feature.properties, category: country?.category || 'personal', categories: (country?.categories || ['personal']).join(',') } }; }) };
+          const polygons = { type: 'FeatureCollection', features: world.features.filter((feature) => selectedNames.has(feature.properties.name) || Object.values(aliases).includes(feature.properties.name)).map((feature) => { const country = countries.find((item) => item.name_en === feature.properties.name || aliases[item.name_en] === feature.properties.name); const categories = country?.categories || ['personal']; return { ...feature, properties: { ...feature.properties, category: country?.category || 'personal', categories: categories.join(','), style_key: visualKey(categories) } }; }) };
           const points = { type: 'FeatureCollection', features: travel.places.map((place) => { const item = normaliseCategories(place); return { type: 'Feature', properties: { ...item, categories: item.categories.join(','), category_label: categoryLabels(item.categories) }, geometry: { type: 'Point', coordinates: [item.longitude, item.latitude] } }; }) };
           const map = new maplibregl.Map({ container: travelMap, style: 'https://tiles.openfreemap.org/styles/liberty', center: [12, 35], zoom: 1.1, attributionControl: true });
           map.addControl(new maplibregl.NavigationControl(), 'top-right'); map.addControl(new maplibregl.FullscreenControl(), 'top-right');
@@ -49,14 +63,18 @@
           const fit = () => map.fitBounds(bounds, { padding: 52, maxZoom: 4, duration: reducedMotion ? 0 : 500 });
           const showWorld = () => map.fitBounds([[-180, -58], [180, 82]], { padding: 28, duration: 0 });
           map.on('load', () => {
+            const patternKeys = [...new Set(polygons.features.map((feature) => feature.properties.style_key))];
+            patternKeys.forEach((key) => map.addImage(`travel-${key}`, makePattern(key)));
+            const fillPattern = ['match', ['get', 'style_key']]; patternKeys.forEach((key) => fillPattern.push(key, `travel-${key}`)); fillPattern.push(`travel-${patternKeys[0]}`);
             map.addSource('travel-countries', { type: 'geojson', data: polygons }); map.addSource('travel-places', { type: 'geojson', data: points });
-            map.addLayer({ id: 'travel-country-fill', type: 'fill', source: 'travel-countries', paint: { 'fill-color': ['match', ['get', 'category'], 'education', '#2f77bc', '#1a907f'], 'fill-opacity': .52 } });
+            map.addLayer({ id: 'travel-country-fill', type: 'fill', source: 'travel-countries', paint: { 'fill-pattern': fillPattern, 'fill-opacity': .72 } });
             map.addLayer({ id: 'travel-country-line', type: 'line', source: 'travel-countries', paint: { 'line-color': '#ffffff', 'line-width': 1.2 } });
-            map.addLayer({ id: 'travel-place', type: 'circle', source: 'travel-places', paint: { 'circle-radius': 7, 'circle-color': ['match', ['get', 'category'], 'education', '#2f77bc', '#7b56bb'], 'circle-stroke-color': '#fff', 'circle-stroke-width': 2 } });
+            map.addLayer({ id: 'travel-place', type: 'circle', source: 'travel-places', paint: { 'circle-radius': 7, 'circle-color': ['match', ['get', 'category'], 'lived', '#2d9763', 'professional', '#236fbd', 'education', '#2d9763', '#7b56bb'], 'circle-stroke-color': '#fff', 'circle-stroke-width': 2 } });
             const popup = new maplibregl.Popup({ closeButton: true, closeOnClick: true });
             map.on('click', 'travel-place', (event) => { const p = event.features[0].properties; popup.setLngLat(event.lngLat).setHTML(`<strong>${p.city}</strong><br>${p.category_label}<br>${p.period}<br>${language === 'fr' ? p.label_fr : p.label_en}`).addTo(map); });
             map.on('click', 'travel-country-fill', (event) => { const name = event.features[0].properties.name; const country = countries.find((item) => item.name_en === name || aliases[item.name_en] === name); popup.setLngLat(event.lngLat).setHTML(`<strong>${language === 'fr' ? country.name_fr : country.name_en}</strong><br>${categoryLabels(country.categories)}`).addTo(map); });
             ['travel-place', 'travel-country-fill'].forEach((id) => { map.on('mouseenter', id, () => map.getCanvas().style.cursor = 'pointer'); map.on('mouseleave', id, () => map.getCanvas().style.cursor = ''); }); showWorld();
+            const legend = document.createElement('p'); legend.className = 'map-legend'; legend.innerHTML = `<span class="map-legend-work">${categoryLabel('professional')}</span><span class="map-legend-lived">${categoryLabel('lived')}</span><span class="map-legend-personal">${categoryLabel('personal')}</span><span class="map-legend-multiple">${language === 'fr' ? 'Hachures : plusieurs motifs' : 'Stripes: multiple reasons'}</span>`; travelMap.before(legend);
             document.querySelectorAll('[data-map-filter]').forEach((button) => button.addEventListener('click', () => { const value = button.dataset.mapFilter; const filter = value === 'all' ? null : ['in', value, ['get', 'categories']]; map.setFilter('travel-country-fill', filter); map.setFilter('travel-country-line', filter); map.setFilter('travel-place', filter); document.querySelectorAll('[data-map-filter]').forEach((item) => item.classList.toggle('is-active', item === button)); }));
             document.querySelector('[data-map-fit]')?.addEventListener('click', fit);
           });

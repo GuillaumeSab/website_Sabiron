@@ -95,8 +95,8 @@ def featured_publications() -> list[dict]:
 
 def travel_countries() -> list[dict]:
     labels = {
-        "en": {"personal": "Personal travel", "education": "Education", "professional": "Professional"},
-        "fr": {"personal": "Personnel", "education": "Études", "professional": "Professionnel"},
+        "en": {"personal": "Personal travel", "education": "Education", "professional": "Professional", "lived": "Lived"},
+        "fr": {"personal": "Personnel", "education": "Études", "professional": "Professionnel", "lived": "Lieux vécus"},
     }
     countries = json.loads((ROOT / "data" / "travel_countries.json").read_text(encoding="utf-8"))["countries"]
     for country in countries:
