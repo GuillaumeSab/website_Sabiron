@@ -57,7 +57,16 @@
           const aliases = { 'United States': 'USA', 'United Kingdom': 'England', 'South Korea': 'South Korea', 'Czechia': 'Czech Republic', 'Serbia': 'Republic of Serbia' };
           const polygons = { type: 'FeatureCollection', features: world.features.filter((feature) => selectedNames.has(feature.properties.name) || Object.values(aliases).includes(feature.properties.name)).map((feature) => { const country = countries.find((item) => item.name_en === feature.properties.name || aliases[item.name_en] === feature.properties.name); const categories = country?.categories || ['personal']; return { ...feature, properties: { ...feature.properties, category: country?.category || 'personal', categories: categories.join(','), style_key: visualKey(categories) } }; }) };
           const points = { type: 'FeatureCollection', features: travel.places.map((place) => { const item = normaliseCategories(place); return { type: 'Feature', properties: { ...item, categories: item.categories.join(','), category_label: categoryLabels(item.categories) }, geometry: { type: 'Point', coordinates: [item.longitude, item.latitude] } }; }) };
-          const map = new maplibregl.Map({ container: travelMap, style: 'https://tiles.openfreemap.org/styles/liberty', center: [12, 35], zoom: 1.1, attributionControl: true });
+          const map = new maplibregl.Map({
+            container: travelMap,
+            style: 'https://tiles.openfreemap.org/styles/liberty',
+            center: [12, 35],
+            zoom: 1.1,
+            attributionControl: true,
+            // Keep a single copy of the world at low zoom levels.
+            renderWorldCopies: false,
+            maxBounds: [[-180, -85], [180, 85]],
+          });
           map.addControl(new maplibregl.NavigationControl(), 'top-right'); map.addControl(new maplibregl.FullscreenControl(), 'top-right');
           const bounds = new maplibregl.LngLatBounds(); points.features.forEach((feature) => bounds.extend(feature.geometry.coordinates));
           const fit = () => map.fitBounds(bounds, { padding: 52, maxZoom: 4, duration: reducedMotion ? 0 : 500 });
