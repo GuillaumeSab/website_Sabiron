@@ -80,6 +80,10 @@ def main() -> int:
             errors.append(f"{page.relative_to(root)}: empty list remains")
         if "static.cloudflareinsights.com/beacon.min.js" not in html:
             errors.append(f"{page.relative_to(root)}: missing analytics beacon")
+        if page in {root / "index.html", root / "fr" / "index.html"}:
+            for required in ('action="https://formspree.io/f/mdaqgjny"', 'name="topic"', 'name="privacy_acknowledged"', 'data-contact-status'):
+                if required not in html:
+                    errors.append(f"{page.relative_to(root)}: incomplete contact form ({required})")
         if page not in {root / "privacy" / "index.html", root / "fr" / "privacy" / "index.html", root / "404.html", root / "fr" / "404.html"} and "Privacy policy" not in html and "Politique de confidentialité" not in html:
             errors.append(f"{page.relative_to(root)}: missing privacy-policy footer link")
     required_assets = [

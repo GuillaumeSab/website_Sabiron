@@ -254,16 +254,23 @@
       const status = form.querySelector('[data-contact-status]');
       const button = form.querySelector('button[type="submit"]');
       const french = document.documentElement.lang === 'fr';
-      if (button) button.disabled = true;
-      if (status) status.textContent = french ? 'Envoi en cours…' : 'Sending…';
+      const formData = new FormData(form);
+      const topic = String(formData.get('topic') || '').trim();
+      formData.set('_subject', `Portfolio contact${topic ? ` — ${topic}` : ''}`);
+      if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); }
+      form.setAttribute('aria-busy', 'true');
+      if (status) { status.dataset.state = 'sending'; status.textContent = french ? 'Envoi en cours…' : 'Sending…'; }
       try {
-        const response = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        const response = await fetch(form.action, { method: 'POST', body: formData, headers: { Accept: 'application/json' } });
         if (!response.ok) throw new Error('Form submission failed');
         form.reset();
-        if (status) status.textContent = french ? 'Merci, votre message a bien été envoyé.' : 'Thank you, your message has been sent.';
+        if (status) { status.dataset.state = 'success'; status.textContent = french ? 'Merci, votre message a bien été envoyé. Je vous répondrai dès que possible.' : 'Thank you, your message has been sent. I will reply as soon as possible.'; }
       } catch (_) {
-        if (status) status.textContent = french ? 'L’envoi a échoué. Réessayez dans un instant.' : 'Sending failed. Please try again shortly.';
-      } finally { if (button) button.disabled = false; }
+        if (status) { status.dataset.state = 'error'; status.textContent = french ? 'L’envoi a échoué. Vérifiez votre connexion puis réessayez.' : 'Sending failed. Check your connection and try again.'; }
+      } finally {
+        form.removeAttribute('aria-busy');
+        if (button) { button.disabled = false; button.removeAttribute('aria-busy'); }
+      }
     }));
   });
 })();
