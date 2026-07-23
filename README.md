@@ -25,9 +25,16 @@ Open `http://127.0.0.1:5000` (French: `http://127.0.0.1:5000/?lang=fr`).
 ./.venv/bin/python build_static.py
 ./.venv/bin/python scripts/check_site.py
 npm run build
+npm run quality
 ```
 
 `build_static.py` generates the GitHub Pages output in `docs/`; `npm run build` packages it in `dist/`. Generated directories must never be edited directly.
+
+`npm run quality` is the routine to run before a content or design update: it compiles the Python sources, regenerates the public site, checks every static page, and packages the deployment artifact. GitHub Actions runs the same checks on every push to `main`.
+
+## Privacy
+
+The bilingual [privacy policy](https://guillaumesabiron.github.io/privacy/) documents the contact form (Formspree), Cloudflare Web Analytics, aggregated CV-download metrics and third-party media loaded after an explicit click.
 
 ## Content sources
 

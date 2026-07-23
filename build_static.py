@@ -32,6 +32,8 @@ def _static_links(html: str, language: str, depth: int) -> str:
         "/skills/?lang=fr": f"{prefix}fr/skills/",
         "/publications/?lang=en": f"{prefix}publications/",
         "/publications/?lang=fr": f"{prefix}fr/publications/",
+        "/privacy/?lang=en": f"{prefix}privacy/",
+        "/privacy/?lang=fr": f"{prefix}fr/privacy/",
     }
     # Replace longer paths first: otherwise the home-path pattern is also a
     # substring of `/skills/?lang=…` and produces invalid links.
@@ -48,6 +50,8 @@ def build_static_site() -> Path:
         publications_fr = _static_links(_render_page(client, "/publications/", "fr", "../../static/", {}), "fr", 2)
         skills_en = _static_links(_render_page(client, "/skills/", "en", "../static/", {}), "en", 1)
         skills_fr = _static_links(_render_page(client, "/skills/", "fr", "../../static/", {}), "fr", 2)
+        privacy_en = _static_links(_render_page(client, "/privacy/", "en", "../static/", {}), "en", 1)
+        privacy_fr = _static_links(_render_page(client, "/privacy/", "fr", "../../static/", {}), "fr", 2)
         not_found_en = _static_links(_render_page(client, "/missing", "en", "static/", {}), "en", 0)
         not_found_fr = _static_links(_render_page(client, "/missing", "fr", "../static/", {}), "fr", 1)
 
@@ -89,8 +93,14 @@ def build_static_site() -> Path:
     french_skills_dir = french_dir / "skills"
     french_skills_dir.mkdir(exist_ok=True)
     (french_skills_dir / "index.html").write_text(skills_fr, encoding="utf-8")
+    privacy_dir = OUTPUT_DIR / "privacy"
+    privacy_dir.mkdir(exist_ok=True)
+    (privacy_dir / "index.html").write_text(privacy_en, encoding="utf-8")
+    french_privacy_dir = french_dir / "privacy"
+    french_privacy_dir.mkdir(exist_ok=True)
+    (french_privacy_dir / "index.html").write_text(privacy_fr, encoding="utf-8")
     (OUTPUT_DIR / "robots.txt").write_text("User-agent: *\nAllow: /\nSitemap: https://guillaumesabiron.github.io/sitemap.xml\n", encoding="utf-8")
-    pages = ["", "fr/", "skills/", "fr/skills/", "publications/", "fr/publications/"]
+    pages = ["", "fr/", "skills/", "fr/skills/", "publications/", "fr/publications/", "privacy/", "fr/privacy/"]
     sitemap_urls = "\n".join(f"  <url><loc>https://guillaumesabiron.github.io/{page}</loc></url>" for page in pages)
     (OUTPUT_DIR / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{sitemap_urls}\n</urlset>\n', encoding="utf-8")
 

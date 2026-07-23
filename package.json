@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build-static-site.mjs"
+    "build": "node scripts/build-static-site.mjs",
+    "quality": "sh scripts/quality.sh"
   }
 }

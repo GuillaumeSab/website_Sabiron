@@ -69,6 +69,11 @@ def publications():
     return render_template('publications_page.html', lang=page_language())
 
 
+@app.route('/privacy/')
+def privacy():
+    return render_template('privacy_page.html', lang=page_language())
+
+
 @app.errorhandler(404)
 def not_found(_error):
     return render_template('not_found.html', lang=page_language()), 404

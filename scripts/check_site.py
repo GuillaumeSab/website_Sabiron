@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from html.parser import HTMLParser
+import json
 from pathlib import Path
 
 
@@ -33,11 +34,13 @@ def main() -> int:
         root / "fr" / "publications" / "index.html",
         root / "skills" / "index.html",
         root / "fr" / "skills" / "index.html",
+        root / "privacy" / "index.html",
+        root / "fr" / "privacy" / "index.html",
         root / "404.html",
         root / "fr" / "404.html",
     ]
-    english_pages = {root / "index.html", root / "skills" / "index.html", root / "publications" / "index.html"}
-    french_pages = {root / "fr" / "index.html", root / "fr" / "skills" / "index.html", root / "fr" / "publications" / "index.html"}
+    english_pages = {root / "index.html", root / "skills" / "index.html", root / "publications" / "index.html", root / "privacy" / "index.html"}
+    french_pages = {root / "fr" / "index.html", root / "fr" / "skills" / "index.html", root / "fr" / "publications" / "index.html", root / "fr" / "privacy" / "index.html"}
     errors: list[str] = []
     for page in pages:
         if not page.exists():
@@ -77,6 +80,8 @@ def main() -> int:
             errors.append(f"{page.relative_to(root)}: empty list remains")
         if "static.cloudflareinsights.com/beacon.min.js" not in html:
             errors.append(f"{page.relative_to(root)}: missing analytics beacon")
+        if page not in {root / "privacy" / "index.html", root / "fr" / "privacy" / "index.html", root / "404.html", root / "fr" / "404.html"} and "Privacy policy" not in html and "Politique de confidentialité" not in html:
+            errors.append(f"{page.relative_to(root)}: missing privacy-policy footer link")
     required_assets = [
         root / "static" / "documents" / "guillaume-sabiron-cv-en.pdf",
         root / "static" / "documents" / "guillaume-sabiron-cv-fr.pdf",
@@ -89,6 +94,14 @@ def main() -> int:
     for asset in (root / "robots.txt", root / "sitemap.xml", root / "static" / "img" / "og-guillaume-sabiron.png"):
         if not asset.exists():
             errors.append(f"missing generated SEO asset: {asset.relative_to(root)}")
+    sitemap = (root / "sitemap.xml").read_text(encoding="utf-8") if (root / "sitemap.xml").exists() else ""
+    for path in ("privacy/", "fr/privacy/"):
+        if f"https://guillaumesabiron.github.io/{path}" not in sitemap:
+            errors.append(f"sitemap.xml: missing {path}")
+    travel_data = json.loads((root / "static" / "data" / "travel_countries.json").read_text(encoding="utf-8"))
+    place_ids = [place["id"] for place in travel_data["places"]]
+    if len(place_ids) != len(set(place_ids)):
+        errors.append("travel data: duplicate place IDs")
     if errors:
         print("Static-site checks failed:", *errors, sep="\n- ")
         return 1
