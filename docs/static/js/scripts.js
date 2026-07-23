@@ -43,11 +43,24 @@
       };
       const loadMapLibre = () => new Promise((resolve, reject) => {
         if (window.maplibregl) return resolve(window.maplibregl);
-        const script = document.createElement('script'); script.src = `${document.documentElement.dataset.staticRoot || '/static'}/vendor/maplibre-gl.js`; script.onload = () => window.maplibregl ? resolve(window.maplibregl) : reject(new Error('Map library unavailable')); script.onerror = () => reject(new Error('Map library could not load')); document.head.append(script);
+        const script = document.createElement('script'); script.src = `${document.documentElement.dataset.staticRoot || '/static'}/vendor/maplibre-gl.js?v=20260722`; script.onload = () => window.maplibregl ? resolve(window.maplibregl) : reject(new Error('Map library unavailable')); script.onerror = () => reject(new Error('Map library could not load')); document.head.append(script);
       });
+      const fetchJson = async (url) => {
+        let lastError;
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+          try {
+            const response = await fetch(url, { cache: 'no-cache' });
+            if (!response.ok) throw new Error(`Could not load ${url} (${response.status})`);
+            return await response.json();
+          } catch (error) {
+            lastError = error;
+          }
+        }
+        throw lastError;
+      };
       const startMap = async () => {
         try {
-          const [maplibregl, travel, world] = await Promise.all([loadMapLibre(), fetch(travelMap.dataset.travelData).then((r) => r.json()), fetch(travelMap.dataset.worldData).then((r) => r.json())]);
+          const [maplibregl, travel, world] = await Promise.all([loadMapLibre(), fetchJson(travelMap.dataset.travelData), fetchJson(travelMap.dataset.worldData)]);
           const countries = travel.countries.map(normaliseCategories);
           travelMap.closest('figure')?.querySelectorAll('figcaption li').forEach((item, index) => {
             const country = countries[index];
@@ -87,7 +100,12 @@
             document.querySelectorAll('[data-map-filter]').forEach((button) => button.addEventListener('click', () => { const value = button.dataset.mapFilter; const filter = value === 'all' ? null : ['in', value, ['get', 'categories']]; map.setFilter('travel-country-fill', filter); map.setFilter('travel-country-line', filter); map.setFilter('travel-place', filter); document.querySelectorAll('[data-map-filter]').forEach((item) => item.classList.toggle('is-active', item === button)); }));
             document.querySelector('[data-map-fit]')?.addEventListener('click', fit);
           });
-        } catch (_) { travelMap.classList.add('map-unavailable'); travelMap.textContent = language === 'fr' ? 'La carte n’a pas pu être chargée. Consultez la liste accessible ci-dessous.' : 'The map could not load. Please use the accessible list below.'; }
+        } catch (error) {
+          console.error('Travel map failed to load:', error);
+          travelMap.classList.add('map-unavailable');
+          travelMap.innerHTML = `<p>${language === 'fr' ? 'La carte n’a pas pu être chargée.' : 'The map could not load.'}</p><button type="button">${language === 'fr' ? 'Réessayer' : 'Retry'}</button>`;
+          travelMap.querySelector('button')?.addEventListener('click', () => { travelMap.classList.remove('map-unavailable'); travelMap.textContent = ''; startMap(); }, { once: true });
+        }
       };
       new IntersectionObserver((entries, observer) => { if (entries.some((entry) => entry.isIntersecting)) { observer.disconnect(); startMap(); } }, { rootMargin: '300px' }).observe(travelMap);
     }
