@@ -68,6 +68,7 @@ def build_static_site() -> Path:
     travel_data_dest = STATIC_DEST / "data"
     travel_data_dest.mkdir(exist_ok=True)
     shutil.copy2(PROJECT_ROOT / "data" / "travel_countries.json", travel_data_dest / "travel_countries.json")
+    shutil.copy2(PROJECT_ROOT / "data" / "papers_data.json", travel_data_dest / "papers_data.json")
 
     (OUTPUT_DIR / "index.html").write_text(rendered_en, encoding="utf-8")
     (OUTPUT_DIR / ".nojekyll").write_text("", encoding="utf-8")

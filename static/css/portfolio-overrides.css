@@ -148,13 +148,13 @@ html[lang="fr"] .travel-map::before { content:"Carte de voyages personnels"; }
 .profile-action-bar a { display:inline-flex; min-height:42px; align-items:center; padding:.55rem .85rem; border:1px solid var(--line); border-radius:9px; color:var(--ink); font-weight:750; text-decoration:none; }
 .profile-action-bar a:hover { border-color:var(--blue); color:var(--blue); }
 .profile-action-bar-bottom { margin-top:2.5rem; }
-.publication-grid .publication-authors,.publication-grid .publication-venue { margin:.35rem 0 0; color:var(--muted); font-size:.82rem; line-height:1.4; }
+.publication-grid .publication-authors,.publication-grid .publication-venue { margin:.35rem 0 0; color:var(--muted); font-size:.82rem; line-height:1.4; }.publication-authors strong,.reference-authors strong { color:var(--blue); font-weight:800; }
 .publications-shell .subheading { margin:2.3rem 0 .7rem; color:var(--blue); font-size:.82rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; }
 .publications-shell ul { margin:0; padding:0; list-style:none; }
 .publications-shell li { border-bottom:1px solid var(--line); }
 .reference-item { padding:.85rem 0; }
 .reference-title { display:flex; justify-content:space-between; gap:1rem; color:var(--ink); font-weight:750; cursor:pointer; }
-.reference-title { display:grid; grid-template-columns:minmax(0,1fr) minmax(180px,.42fr) 1rem; align-items:start; }.reference-scan-meta { color:var(--blue); font-size:.78rem; font-weight:700; line-height:1.4; }.reference-title::after { content:"⌄"; color:var(--blue); }.reference-item[open] .reference-title::after { transform:rotate(180deg); }
+.reference-title { display:grid; grid-template-columns:minmax(0,1fr) 1rem; align-items:start; }.reference-scan-meta { color:var(--blue); font-size:.78rem; font-weight:700; line-height:1.4; }.reference-authors { grid-column:1; display:block; margin-top:.35rem; color:var(--muted); font-size:.82rem; font-weight:400; line-height:1.4; }.reference-title::after { grid-column:2; grid-row:1 / span 2; content:"⌄"; color:var(--blue); }.reference-item[open] .reference-title::after { transform:rotate(180deg); }
 .reference-item .description { padding:.7rem 0 .25rem; color:var(--muted); }
 .publication-meta { color:var(--blue); font-size:.85rem; font-weight:700; }
 .media-dialog { width:min(1200px,calc(100% - 2rem)); max-width:95vw; max-height:92vh; padding:0; border:0; background:#000; color:#fff; }

@@ -111,6 +111,36 @@
     }
 
     const lists = document.querySelectorAll('.publications-shell ul');
+    const normaliseCitationTitle = (value) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    const renderReferenceAuthors = async () => {
+      if (!document.querySelector('.reference-item')) return;
+      try {
+        const response = await fetch(`${document.documentElement.dataset.staticRoot || '/static'}/data/papers_data.json`, { cache: 'no-cache' });
+        if (!response.ok) throw new Error(`Could not load publication authors (${response.status})`);
+        const data = await response.json();
+        const authorsByTitle = new Map(data.papers.map((paper) => [normaliseCitationTitle(paper.bib?.title || ''), (paper.bib?.author || '').split(' and ').filter(Boolean)]));
+        document.querySelectorAll('.reference-item').forEach((entry) => {
+          const summary = entry.querySelector('.reference-title');
+          const title = summary?.childNodes[0]?.textContent?.trim();
+          if (!summary || !title || summary.querySelector('.reference-authors')) return;
+          const authors = authorsByTitle.get(normaliseCitationTitle(title));
+          if (!authors?.length) return;
+          summary.querySelector('.reference-scan-meta')?.remove();
+          const authorLine = document.createElement('span');
+          authorLine.className = 'reference-authors';
+          authors.forEach((author, index) => {
+            const highlighted = /(?:guillaume|g)\.?\s+sabiron/i.test(author);
+            const name = document.createElement(highlighted ? 'strong' : 'span');
+            name.textContent = author;
+            authorLine.append(name);
+            if (index < authors.length - 1) authorLine.append(', ');
+          });
+          summary.append(authorLine);
+        });
+      } catch (error) {
+        console.warn('Reference authors could not be loaded:', error);
+      }
+    };
     lists.forEach((list) => {
       const heading = list.previousElementSibling?.textContent || '';
       const type = /Journal|revue/i.test(heading) ? 'paper' : /Conference|Conférence/i.test(heading) ? 'conference' : /Book|ouvrage/i.test(heading) ? 'book' : /Patent|Brevet/i.test(heading) ? 'patent' : /Thesis|Thèse/i.test(heading) ? 'thesis' : 'media';
@@ -119,17 +149,8 @@
         entry.dataset.publicationYear = entry.textContent.match(/\b(?:19|20)\d{2}\b/)?.[0] || '0';
       });
       [...list.children].sort((a, b) => Number(b.dataset.publicationYear) - Number(a.dataset.publicationYear)).forEach((entry) => list.append(entry));
-      [...list.querySelectorAll('.reference-item')].forEach((entry) => {
-        const summary = entry.querySelector('.reference-title');
-        const meta = entry.querySelector('.publication-meta');
-        if (summary && meta && !summary.querySelector('.reference-scan-meta')) {
-          const scanMeta = document.createElement('span');
-          scanMeta.className = 'reference-scan-meta';
-          scanMeta.textContent = meta.textContent.replace(/\s+/g, ' ').trim();
-          summary.append(scanMeta);
-        }
-      });
     });
+    renderReferenceAuthors();
     document.querySelectorAll('[data-publication-filter]').forEach((button) => button.addEventListener('click', () => {
       const selected = button.dataset.publicationFilter;
       document.querySelectorAll('.publications-shell li[data-publication-type]').forEach((entry) => { entry.hidden = selected !== 'all' && entry.dataset.publicationType !== selected; });
